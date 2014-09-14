@@ -1,2 +1,9 @@
 <h1> Здесь будут отображаться посты</h1>
-<p>Да, да, здесь...</p>
+<p>
+	<% @results.each do |post| %>
+		<%= post['content'] %>
+		<br/>
+		<%= post['create_date'] %>
+		<br/>
+	<% end %>
+</p>
