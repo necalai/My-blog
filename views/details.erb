@@ -1,0 +1,23 @@
+<h2>Пост #<%= @post_id %></h2>
+<p> 
+	<%= @row['content'] %>
+	<br/>
+	<span style="color: #b2b2b2; font-size: 80%; font-style: italic"> Добавлен:
+		<%= @row['create_date'] %>
+	</span>
+	<br/>
+</p>
+<% @comments.each do |comment| %>
+		<p>
+			<%= comment['content'] %>
+			<br/>
+			Added at <%= comment['create_date'] %>
+		</p>
+<% end %>
+<p>
+	<form action="/details/<%= @row['id'] %>" method="POST" role="form">
+	  <textarea name="comment_txt" style="width: 500px" class="form-control" rows="6" placeholder="Введите текст комментария..."></textarea>
+	  <br/>
+	  <button type="submit" class="btn btn-primary">Уиии!</button>
+	</form>
+</p>

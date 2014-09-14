@@ -3,7 +3,12 @@
 	<% @results.each do |post| %>
 		<%= post['content'] %>
 		<br/>
-		<%= post['create_date'] %>
+		<span style="color: #b2b2b2; font-size: 80%; font-style: italic"> Добавлен:
+			<%= post['create_date'] %>
+		</span>
+		<br/>
+		<a href="/details/<%= post['id'] %>">Комментарии</a>
+		<br/>
 		<br/>
 	<% end %>
 </p>
