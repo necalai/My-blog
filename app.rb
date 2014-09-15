@@ -44,7 +44,7 @@ end
 post '/new' do
   @post_txt = params[:post_txt]
   @username = params[:username]
-  hh = {:post_txt => "Введите текст поста", :username => "Представьтесь"}
+  hh = {:username => "Представьтесь", :post_txt => "Введите текст поста"}
   hh.each do |k, v|
   	if params[k].size < 1
   		@error = v
@@ -72,15 +72,15 @@ get '/details/:post_id' do
 
   @comments = @db.execute 'select * from Comments where post_id = ? order by id desc', [@post_id]
 
-  erb :details
+   erb :details
 end
 
 post '/details/:post_id' do
 	post_id = params[:post_id]
 	@comment_txt = params[:comment_txt]
-	if params[:comment_txt].size < 1
-  		@error = "Введите текст комментария"
-  		return erb :details
+	if params[:comment_txt].size == 0
+  		@error = "Enter text comment..."
+  		return erb :details 
     end
 	@db.execute 'insert into Comments
 	(

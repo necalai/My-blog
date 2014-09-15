@@ -1,9 +1,9 @@
-<h2>Пост #<%= @post_id %></h2>
+<h2>Post #<%= @post_id %></h2>
 <p> 
 	<%= @row['content'] %>
 	<br/>
-	<span style="color: #b2b2b2; font-size: 80%; font-style: italic"> Добавлен:
-		<%= @row['create_date'] %>
+	<span style="color: #b2b2b2; font-size: 80%; font-style: italic"> 
+		<%= @row['username'] %> wrote at <%= @row['create_date'] %>
 	</span>
 	<br/>
 </p>
@@ -11,7 +11,9 @@
 		<p>
 			<%= comment['content'] %>
 			<br/>
+			<span style="color: #b2b2b2; font-size: 80%; font-style: italic">
 			Added at <%= comment['create_date'] %>
+			</span>
 		</p>
 <% end %>
 <p>
