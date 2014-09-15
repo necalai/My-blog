@@ -1,3 +1,4 @@
+
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
@@ -66,22 +67,27 @@ post '/new' do
 end
 
 get '/details/:post_id' do
-  @post_id = params[:post_id]
-  results = @db.execute 'select * from Posts where id = ?', [@post_id]
-  @row = results[0]
+	def com
+	  @post_id = params[:post_id]
+	  results = @db.execute 'select * from Posts where id = ?', [@post_id]
+	  @row = results[0]
+	  @comments = @db.execute 'select * from Comments where post_id = ? order by id desc', [@post_id]
+	end
 
-  @comments = @db.execute 'select * from Comments where post_id = ? order by id desc', [@post_id]
-
-   erb :details
+	com
+	erb :details
 end
 
 post '/details/:post_id' do
 	post_id = params[:post_id]
 	@comment_txt = params[:comment_txt]
+
 	if params[:comment_txt].size == 0
-  		@error = "Enter text comment..."
+  		@error = "Введите текст комментария..."
+  		com
   		return erb :details 
     end
+
 	@db.execute 'insert into Comments
 	(
 		content,
