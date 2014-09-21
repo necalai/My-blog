@@ -6,7 +6,8 @@ require 'sinatra/activerecord'
 
 set :database, "sqlite3:my_blog.db"
 
-class Post < ActiveRecord::Base
+class Post < ActiveRecord::Base	
+	has_many :comments
 end
 
 # def get_db
@@ -39,17 +40,21 @@ end
 # end   
 
 get '/' do
-	# @results = @db.execute 'select * from Posts order by id desc'
+	@posts = Post.order('created_at DESC')
   	erb :index
 end
 
 get '/new' do
+	@p = Post.new
 	erb :new
 end
 
 post '/new' do
-  @post_txt = params[:post_txt]
-  @username = params[:username]
+	@p = Post.new params[:post]
+	@p.datestamp = Time.now
+	@p.save
+  # @post_txt = params[:post_txt]
+  # @username = params[:username]
   # hh = {:username => "Представьтесь", :post_txt => "Введите текст поста"}
   # hh.each do |k, v|
   # 	if params[k].size < 1
@@ -71,7 +76,8 @@ post '/new' do
   redirect to '/'
 end
 
-get '/details/:post_id' do
+get '/details/:id' do
+	@post = Post.find(params[:id])
 	# def com
 	#   @post_id = params[:post_id]
 	#   results = @db.execute 'select * from Posts where id = ?', [@post_id]
@@ -83,9 +89,12 @@ get '/details/:post_id' do
 	erb :details
 end
 
-post '/details/:post_id' do
-	post_id = params[:post_id]
-	@comment_txt = params[:comment_txt]
+post '/details/:id' do
+	@p = Post.new params[:post]
+	@p.save
+	@p = Post.find(params[:id])
+	# post_id = params[:post_id]
+	# @comment_txt = params[:comment_txt]
 
 	# if params[:comment_txt].size == 0
  #  		@error = "Введите текст комментария..."
@@ -100,5 +109,5 @@ post '/details/:post_id' do
 	#   	post_id
 	# ) values (?, datetime(), ?)', [@comment_txt, post_id]
 
-   redirect to('/details/'+ post_id)
+   redirect to('/details/' + @p.id)
 end

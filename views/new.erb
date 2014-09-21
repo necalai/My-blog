@@ -1,10 +1,10 @@
 <h2>Новый пост.</h2>
 <form action="/new" method="POST" role="form">
 	<label for="exampleInputEmail1">Представьтесь:</label>
-    <input style="width: 500px" name="username" type="text" class="form-control" id="exampleInputEmail1" placeholder="Введите ваше имя..." value="<%= @username %>">
+    <input style="width: 500px" name="post[username]" type="text" class="form-control" id="exampleInputEmail1" placeholder="Введите ваше имя..." value="<%= @p.username %>">
     <br/>
     <label for="exampleInputEmail1">Введите текст поста:</label>
-	<textarea name="post_txt" style="width: 500px" class="form-control" rows="6" placeholder="Введите текст поста..."></textarea>
+	<textarea name="post[content]" style="width: 500px" class="form-control" rows="6" placeholder="Введите текст поста..."></textarea>
 	<br/>
 	
 	<button type="submit" class="btn btn-primary">Уиии!</button>

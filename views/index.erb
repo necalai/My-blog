@@ -1,10 +1,10 @@
 <h1> Здесь будут отображаться посты</h1>
 <p>
-	<% @results.each do |post| %>
-		<%= post['content'] %>
+	<% @posts.each do |post| %>
+		<%= post.content %>
 		<br/>
 		<span style="color: #b2b2b2; font-size: 80%; font-style: italic">
-		<%= post['username'] %> <%= post['create_date'] %>
+		<%= post.username %> <%= post.datestamp %>
 		</span>
 		<br/>
 		<a href="/details/<%= post['id'] %>">Комментарии</a>
