@@ -5,9 +5,10 @@
 	<br/>
 	Написал <%= @post.username %> <%= @post.datestamp %>
 	</span>
-	<br/>
+	<hr/>
 </p>
 
+<h3>Комменты:</h3>
 <% @comments.each do |comment| %>
 	<p>	
 		<%= comment.content_comm %>

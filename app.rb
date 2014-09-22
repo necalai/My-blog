@@ -4,49 +4,18 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sinatra/activerecord'
 
-
 set :database, "sqlite3:my_blog.db"
 
 class Post < ActiveRecord::Base	
+	validates :username, presence: true, length: { minimum: 3 }
+	validates :content, presence: true, length: { minimum: 5 }
 	has_many :comments
 end
 
 class Comment < ActiveRecord::Base	
+	validates :content_comm, presence: true
 	belongs_to :post
 end
-
-# class Comment < ActiveRecord::Base
-# 	belong_to :post
-# end
-
-# def get_db
-# 	@db = SQLite3::Database.new 'my_blog.db'
-# 	@db.results_as_hash = true
-# 	return @db
-# end
-
-# before do	
-# 	get_db
-# end
-
-# configure do
-# 	get_db
-# 	@db.execute 'CREATE TABLE if not exists Posts 
-# 	(
-# 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-# 		content TEXT,
-# 		create_date DATE,
-# 		username TEXT
-# 	)'
-
-# 	@db.execute 'CREATE TABLE if not exists Comments 
-# 	(
-# 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-# 		content TEXT,
-# 		create_date DATE,
-# 		post_id INTEGER
-# 	)'
-# end   
 
 get '/' do
 	@posts = Post.order('created_at DESC')
@@ -61,71 +30,35 @@ end
 post '/new' do
 	@p = Post.new params[:post]
 	@p.datestamp = Time.now
-	@p.save
-  # @post_txt = params[:post_txt]
-  # @username = params[:username]
-  # hh = {:username => "Представьтесь", :post_txt => "Введите текст поста"}
-  # hh.each do |k, v|
-  # 	if params[k].size < 1
-  # 		@error = v
-  # 		return erb :new
-  # 	end
-  # end
-  # if @post_txt.size < 1
-  # 		@error = "Введите текст поста"
-  # 		return erb :new
-  # end
-  # @db.execute 'insert into Posts
-  # (
-  # 	content,
-  # 	create_date,
-  # 	username
-  # ) values (?, datetime(), ?)', [@post_txt, @username]
-
-  redirect to '/'
+	if @p.save 
+		redirect to '/'
+	else
+		@error = @p.errors.full_messages.first
+		return erb :new
+	end	
 end
 
 get '/details/:id' do
-	#@comments = Comment.new
-	@post = Post.find(params[:id])	
-	c = Comment.where("post_id = #{@post.id}")
-	@comments = c.order('created_at DESC')
-	
-	# def com
-	#   @post_id = params[:post_id]
-	#   results = @db.execute 'select * from Posts where id = ?', [@post_id]
-	#   @row = results[0]
-	#   @comments = @db.execute 'select * from Comments where post_id = ? order by id desc', [@post_id]
-	# end
+	def func
+		@post = Post.find(params[:id])	
+		c = Comment.where("post_id = #{@post.id}")
+		@comments = c.order('created_at DESC')
+	end
 
-	# com
+	f
 	erb :details
 end
 
-post '/details/:post_id' do
-	# @c = Post.find(params[:post_id])
+post '/details/:id' do
 	@c = Comment.new params[:comment]
-	@c.post_id = params[:post_id]
+	@c.post_id = params[:id]
 	@c.comment_date = Time.now
-	@c.save
-	#@c = Post.find(params[:post_id])
-	# post_id = params[:post_id]
-	# @comment_txt = params[:comment_txt]
-
-	# if params[:comment_txt].size == 0
- #  		@error = "Введите текст комментария..."
- #  		com
- #  		return erb :details 
- #    end
-
-	# @db.execute 'insert into Comments
-	# (
-	# 	content,
-	#   	create_date,
-	#   	post_id
-	# ) values (?, datetime(), ?)', [@comment_txt, post_id]
-
-   redirect to '/details/' + @c.post_id.to_s
-
-   # redirect to('/details/' + @post.id)
+	
+	if @c.save 
+		redirect to '/details/' + @c.post_id.to_s
+	else
+		@error = @c.errors.full_messages.first
+		func
+		return erb :details
+	end		
 end
