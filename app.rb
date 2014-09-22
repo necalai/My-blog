@@ -4,11 +4,20 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sinatra/activerecord'
 
+
 set :database, "sqlite3:my_blog.db"
 
 class Post < ActiveRecord::Base	
 	has_many :comments
 end
+
+class Comment < ActiveRecord::Base	
+	belongs_to :post
+end
+
+# class Comment < ActiveRecord::Base
+# 	belong_to :post
+# end
 
 # def get_db
 # 	@db = SQLite3::Database.new 'my_blog.db'
@@ -77,7 +86,11 @@ post '/new' do
 end
 
 get '/details/:id' do
-	@post = Post.find(params[:id])
+	#@comments = Comment.new
+	@post = Post.find(params[:id])	
+	c = Comment.where("post_id = #{@post.id}")
+	@comments = c.order('created_at DESC')
+	
 	# def com
 	#   @post_id = params[:post_id]
 	#   results = @db.execute 'select * from Posts where id = ?', [@post_id]
@@ -89,10 +102,13 @@ get '/details/:id' do
 	erb :details
 end
 
-post '/details/:id' do
-	@p = Post.new params[:post]
-	@p.save
-	@p = Post.find(params[:id])
+post '/details/:post_id' do
+	# @c = Post.find(params[:post_id])
+	@c = Comment.new params[:comment]
+	@c.post_id = params[:post_id]
+	@c.comment_date = Time.now
+	@c.save
+	#@c = Post.find(params[:post_id])
 	# post_id = params[:post_id]
 	# @comment_txt = params[:comment_txt]
 
@@ -109,5 +125,7 @@ post '/details/:id' do
 	#   	post_id
 	# ) values (?, datetime(), ?)', [@comment_txt, post_id]
 
-   redirect to('/details/' + @p.id)
+   redirect to '/details/' + @c.post_id.to_s
+
+   # redirect to('/details/' + @post.id)
 end

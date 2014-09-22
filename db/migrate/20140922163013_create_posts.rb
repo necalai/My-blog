@@ -1,15 +1,15 @@
 class CreatePosts < ActiveRecord::Migration
   def change
-  	create_table :posts do |p|  		
-  		p.text :content
-  		p.text :username
-  		p.timestamp :datestamp
+  	create_table :posts do |t|  		
+  		t.text :content
+  		t.text :username
+  		t.timestamp :datestamp
 
-  		p.timestamps
+  		t.timestamps
   	end
 
   	create_table :comments do |t|
-      t.text :post, index: true
+      t.belongs_to :post, index: true
       t.text :content_comm
       t.datetime :comment_date
 

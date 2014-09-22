@@ -8,10 +8,20 @@
 	<br/>
 </p>
 
+<% @comments.each do |comment| %>
+	<p>	
+		<%= comment.content_comm %>
+		<br/>
+		<span style="color: #b2b2b2; font-size: 80%; font-style: italic">
+		Добавлен <%= comment.comment_date %>
+		</span>
+	</p>
+		
+<% end %>
 
 <p>
 	<form action="/details/<%= @post.id %>" method="POST" role="form">
-	  <textarea name="post[content_comm]" style="width: 500px" class="form-control" rows="6" placeholder="Введите текст комментария..."></textarea>
+	  <textarea name="comment[content_comm]" style="width: 500px" class="form-control" rows="6" placeholder="Введите текст комментария..."></textarea>
 	  <br/>
 	  <button type="submit" class="btn btn-primary">Уиии!</button>
 	</form>
