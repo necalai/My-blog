@@ -45,7 +45,7 @@ get '/details/:id' do
 		@comments = c.order('created_at DESC')
 	end
 
-	f
+	func
 	erb :details
 end
 
@@ -53,7 +53,7 @@ post '/details/:id' do
 	@c = Comment.new params[:comment]
 	@c.post_id = params[:id]
 	@c.comment_date = Time.now
-	
+
 	if @c.save 
 		redirect to '/details/' + @c.post_id.to_s
 	else
