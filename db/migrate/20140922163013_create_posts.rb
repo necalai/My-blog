@@ -4,7 +4,7 @@ class CreatePosts < ActiveRecord::Migration
   		t.text :content
   		t.text :username
   		t.timestamp :datestamp
-
+		
   		t.timestamps
   	end
 
