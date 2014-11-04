@@ -39,8 +39,7 @@ post '/new' do
 end
 
 get '/details/:id' do
-	def func
-
+	def func 
 		@post = Post.find(params[:id])	
 		c = Comment.where("post_id = #{@post.id}")
 		@comments = c.order('created_at DESC') 
